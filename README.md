@@ -15,7 +15,7 @@ Add this to your terraform file.
 
 ```tf
 module "lambda-api" {
-  source = "./gitlab.com"
+  source = "github.com/kaos-terraform/lambda-api"
 
   domain = "my-domain"
   environment = "test"

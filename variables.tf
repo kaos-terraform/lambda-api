@@ -25,14 +25,14 @@ variable "public" {
   default     = false
 }
 
-variable "service" {
-  type        = string
-  description = "The service or application name. Resources will also be tagged with this name."
-}
-
 variable "region" {
   type        = string
   description = "The AWS region to deploy to."
+}
+
+variable "service" {
+  type        = string
+  description = "The service or application name. Resources will also be tagged with this name."
 }
 
 variable "zip-destination" {

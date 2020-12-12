@@ -8,13 +8,13 @@ variable "environment" {
   description = "The app environment. This will be used to define the API Gateway stage and will be used for tagging."
 }
 
-variable "lambda-handler-name" {
+variable "lambda_handler_name" {
   type        = string
   default     = "index.handler"
   description = "The file name, followed by a dot, followed by the main function name."
 }
 
-variable "lambda-source" {
+variable "lambda_source" {
   type        = string
   description = "The source directory containing the lambda code."
 }
@@ -35,7 +35,7 @@ variable "service" {
   description = "The service or application name. Resources will also be tagged with this name."
 }
 
-variable "zip-destination" {
+variable "zip_destination" {
   type        = string
   description = "The destination directory to output zipped lambda directories to."
 }

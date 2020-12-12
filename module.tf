@@ -10,12 +10,12 @@ provider "archive" {
 # Convert source directory to a zip file and upload to S3 bucket
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = var.lambda-source
-  output_path = "${var.zip-destination}/${var.domain}.${var.service}.${var.environment}.zip"
+  source_dir  = var.lambda_source
+  output_path = "${var.zip_destination}/${var.domain}.${var.service}.${var.environment}.zip"
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = "${var.domain}.${var.service}.${var.environment}-lambda-api"
+  bucket = "${var.domain}.${var.service}.${var.environment}_lambda_api"
   acl    = "private"
 
   tags = {
@@ -27,7 +27,7 @@ resource "aws_s3_bucket" "bucket" {
 
 resource "aws_s3_bucket_object" "lambda" {
   bucket  = aws_s3_bucket.bucket.bucket
-  key     = "lambda-source-zip"
+  key     = "lambda_source_zip"
   source  = data.archive_file.lambda_zip.output_path
   etag    = filemd5(data.archive_file.lambda_zip.output_path)
 
@@ -44,7 +44,7 @@ resource "aws_s3_bucket_object" "lambda" {
 
 # Define up API Gateway Resource
 resource "aws_api_gateway_rest_api" "api" {
-  name = "${var.domain}.${var.service}.${var.environment}-rest-api"
+  name = "${var.domain}.${var.service}.${var.environment}_rest_api"
 
   tags = {
     Domain      = var.domain
@@ -54,10 +54,10 @@ resource "aws_api_gateway_rest_api" "api" {
 }
 
 resource "aws_lambda_function" "lambda" {
-  function_name = "${var.domain}.${var.service}.${var.environment}-lambda"
+  function_name = "${var.domain}.${var.service}.${var.environment}_lambda"
   s3_bucket = aws_s3_bucket_object.lambda.bucket
   s3_key    = aws_s3_bucket_object.lambda.key
-  handler = var.lambda-handler-name
+  handler = var.lambda_handler_name
   runtime = "nodejs10.x"
   role = aws_iam_role.lambda_exec.arn
   source_code_hash = filebase64sha256(data.archive_file.lambda_zip.output_path)
@@ -72,7 +72,7 @@ resource "aws_lambda_function" "lambda" {
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
 resource "aws_iam_role" "lambda_exec" {
-  name = "${var.domain}.${var.service}.${var.environment}-iam"
+  name = "${var.domain}.${var.service}.${var.environment}_iam"
 
   tags = {
     Domain      = var.domain

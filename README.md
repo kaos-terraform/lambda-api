@@ -14,20 +14,20 @@ It will:
 Add this to your terraform file.
 
 ```tf
-module "lambda-api" {
+module "lambda_api" {
   source = "github.com/kaos-terraform/lambda-api"
 
   domain = "my-domain"
   environment = "test"
-  lambda-source = "./src"
+  lambda_source = "./src"
   service = "my-service"
   region = "us-west-1"
-  zip-destination = "./"
+  zip_destination = "./"
 }
 
 # output the URL to access the lamba via the gateway
 output "base_url" {
-  value = module.lambda-api.api-base-url
+  value = module.lambda_api.api_base_url
 }
 ```
 
@@ -37,10 +37,10 @@ output "base_url" {
 | -------- | ---- | ------- | ----------- |
 | domain | string | | The domain that this service resides within. Resources will also be tagged with this name. |
 | environment | string | | The app environment. This will be used to define the API Gateway stage and will be used for tagging. |
-| lambda-handler-name | string | index.handler | The file name, followed by a dot, followed by the main function name. |
-| lambda-source | string | | The source directory containing the lambda code. |
+| lambda_handler_name | string | index.handler | The file name, followed by a dot, followed by the main function name. |
+| lambda_source | string | | The source directory containing the lambda code. |
 | service | string | | The service or application name. Resources will also be tagged with this name. |
 | public | bool | false | Whether to create a public endpoint for the API gateway. |
 | region | string | | The AWS region to deploy to. |
-| zip-destination | string | | The destination directory to output zipped lambda directories to on your local machine. |
+| zip_destination | string | | The destination directory to output zipped lambda directories to on your local machine. |
 

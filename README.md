@@ -19,13 +19,15 @@ module "lambda_api" {
 
   domain = "my-domain"
   environment = "test"
+  lambda_handler_name = "index.handler"
   lambda_source = "./src"
-  service = "my-service"
+  public = false
   region = "us-west-1"
+  service = "my-service"
   zip_destination = "./"
 }
 
-# output the URL to access the lamba via the gateway
+# output the URL to access the lambda via the gateway
 output "base_url" {
   value = module.lambda_api.api_base_url
 }

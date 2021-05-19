@@ -19,6 +19,12 @@ variable "lambda_source" {
   description = "The source directory containing the lambda code."
 }
 
+variable "node_runtime" {
+  type        = string
+  default     = "14.x"
+  description = "The runtime version number."
+}
+
 variable "public" {
   type        = bool
   description = "Whether to create a public endpoint for the API gateway"

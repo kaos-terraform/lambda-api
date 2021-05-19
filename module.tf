@@ -54,7 +54,7 @@ resource "aws_api_gateway_rest_api" "api" {
 }
 
 resource "aws_lambda_function" "lambda" {
-  function_name = "${var.domain}.${var.service}.${var.environment}_lambda"
+  function_name = "${var.domain}_${var.service}_${var.environment}"
   s3_bucket = aws_s3_bucket_object.lambda.bucket
   s3_key    = aws_s3_bucket_object.lambda.key
   handler = var.lambda_handler_name

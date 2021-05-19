@@ -15,7 +15,7 @@ data "archive_file" "lambda_zip" {
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = "${var.domain}.${var.service}.${var.environment}_lambda_api"
+  bucket = "${var.domain}_${var.service}_${var.environment}_lambda_api"
   acl    = "private"
 
   tags = {

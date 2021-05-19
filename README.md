@@ -52,3 +52,7 @@ It will:
 
 Once changes are made you'll want to specify a new tag with the following commands:
 
+```bash
+$ git tag -a "v0.0.1" -m "First release of webserver-cluster module"
+$ git push --follow-tags
+```

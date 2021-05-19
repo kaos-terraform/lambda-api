@@ -21,7 +21,7 @@ variable "lambda_source" {
 
 variable "node_runtime" {
   type        = string
-  default     = "14.x"
+  default     = "12.x"
   description = "The runtime version number."
 }
 

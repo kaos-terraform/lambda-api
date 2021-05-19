@@ -1,6 +1,5 @@
 provider "aws" {
   region = var.region
-  version = "~> 2.44"
 }
 
 provider "archive" {
@@ -15,7 +14,7 @@ data "archive_file" "lambda_zip" {
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = "${var.domain}_${var.service}_${var.environment}_lambda_api"
+  bucket = "${var.domain}-${var.service}-${var.environment}-lambda-api"
   acl    = "private"
 
   tags = {
@@ -27,7 +26,7 @@ resource "aws_s3_bucket" "bucket" {
 
 resource "aws_s3_bucket_object" "lambda" {
   bucket  = aws_s3_bucket.bucket.bucket
-  key     = "lambda_source_zip"
+  key     = "lambda-source-zip"
   source  = data.archive_file.lambda_zip.output_path
   etag    = filemd5(data.archive_file.lambda_zip.output_path)
 
@@ -44,7 +43,7 @@ resource "aws_s3_bucket_object" "lambda" {
 
 # Define up API Gateway Resource
 resource "aws_api_gateway_rest_api" "api" {
-  name = "${var.domain}.${var.service}.${var.environment}_rest_api"
+  name = "${var.domain}-${var.service}-${var.environment}-rest-api"
 
   tags = {
     Domain      = var.domain
@@ -54,11 +53,11 @@ resource "aws_api_gateway_rest_api" "api" {
 }
 
 resource "aws_lambda_function" "lambda" {
-  function_name = "${var.domain}_${var.service}_${var.environment}"
+  function_name = "${var.domain}-${var.service}-${var.environment}"
   s3_bucket = aws_s3_bucket_object.lambda.bucket
   s3_key    = aws_s3_bucket_object.lambda.key
   handler = var.lambda_handler_name
-  runtime = "nodejs10.x"
+  runtime = "nodejs${var.node_runtime}"
   role = aws_iam_role.lambda_exec.arn
   source_code_hash = filebase64sha256(data.archive_file.lambda_zip.output_path)
 
@@ -72,7 +71,7 @@ resource "aws_lambda_function" "lambda" {
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
 resource "aws_iam_role" "lambda_exec" {
-  name = "${var.domain}.${var.service}.${var.environment}_iam"
+  name = "${var.domain}-${var.service}-${var.environment}-iam"
 
   tags = {
     Domain      = var.domain
@@ -80,22 +79,19 @@ resource "aws_iam_role" "lambda_exec" {
     Service     = var.service
   }
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        Action: "sts:AssumeRole",
+        Principal: {
+          Service: "lambda.amazonaws.com"
+        },
+        Effect: "Allow",
+        Sid: ""
+      }
+    ]
+  })
 }
 
 # Handle requests to non-root path. Handles /*
@@ -148,7 +144,7 @@ resource "aws_api_gateway_deployment" "deployment" {
   ]
 
   rest_api_id = aws_api_gateway_rest_api.api.id
-  stage_name  = "test"
+  stage_name  = var.environment
 
   count       = var.public ? 1 : 0
 }

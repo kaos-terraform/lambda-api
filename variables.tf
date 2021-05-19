@@ -20,7 +20,7 @@ variable "lambda_source" {
 }
 
 variable "public" {
-  type        = boolean
+  type        = bool
   description = "Whether to create a public endpoint for the API gateway"
   default     = false
 }

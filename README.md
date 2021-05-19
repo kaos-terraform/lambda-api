@@ -11,27 +11,29 @@ It will:
 
 # Usage
 
-Add this to your terraform file.
+1. Add this to your terraform file.
 
-```tf
-module "lambda_api" {
-  source = "github.com/kaos-terraform/lambda-api"
+    ```tf
+    module "lambda_api" {
+      source = "github.com/kaos-terraform/lambda-api"
 
-  domain = "my-domain"
-  environment = "test"
-  lambda_handler_name = "index.handler"
-  lambda_source = "./src"
-  public = false
-  region = "us-west-1"
-  service = "my-service"
-  zip_destination = "./"
-}
+      domain = "my-domain"
+      environment = "test"
+      lambda_handler_name = "index.handler"
+      lambda_source = "./src"
+      public = false
+      region = "us-west-1"
+      service = "my-service"
+      zip_destination = "./"
+    }
 
-# output the URL to access the lambda via the gateway
-output "base_url" {
-  value = module.lambda_api.api_base_url
-}
-```
+    # output the URL to access the lambda via the gateway
+    output "base_url" {
+      value = module.lambda_api.base_url
+    }
+    ```
+
+2. Run this command to fetch the module: `terraform get`
 
 ## Variables
 
@@ -45,4 +47,8 @@ output "base_url" {
 | public | bool | false | Whether to create a public endpoint for the API gateway. |
 | region | string | | The AWS region to deploy to. |
 | zip_destination | string | | The destination directory to output zipped lambda directories to on your local machine. |
+
+# Maintenance
+
+Once changes are made you'll want to specify a new tag with the following commands:
 

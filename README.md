@@ -21,6 +21,7 @@ It will:
       environment = "test"
       lambda_handler_name = "index.handler"
       lambda_source = "./src"
+      node_runtime = "12.x"
       public = false
       region = "us-west-1"
       service = "my-service"
@@ -43,6 +44,7 @@ It will:
 | environment | string | | The app environment. This will be used to define the API Gateway stage and will be used for tagging. |
 | lambda_handler_name | string | index.handler | The file name, followed by a dot, followed by the main function name. |
 | lambda_source | string | | The source directory containing the lambda code. |
+| node_runtime | string | 12.x | The nodejs runtime to use. |
 | service | string | | The service or application name. Resources will also be tagged with this name. |
 | public | bool | false | Whether to create a public endpoint for the API gateway. |
 | region | string | | The AWS region to deploy to. |
